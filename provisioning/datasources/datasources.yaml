@@ -1,0 +1,20 @@
+apiVersion: 1
+datasources:
+  - name: Metrics
+    type: prometheus
+    uid: kleff-metrics
+    url: ${METRICS_URL}
+    access: proxy
+    isDefault: true
+    jsonData:
+      timeInterval: "15s"
+  - name: Logs
+    type: loki
+    uid: kleff-logs
+    url: ${LOGS_URL}
+    access: proxy
+  - name: Traces
+    type: tempo
+    uid: kleff-traces
+    url: ${TRACES_URL}
+    access: proxy
