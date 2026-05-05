@@ -63,6 +63,10 @@
     var hasContainerData = containerState[0];
     var setHasContainerData = containerState[1];
 
+    var hostState = useState(false);
+    var hasHostData = hostState[0];
+    var setHasHostData = hostState[1];
+
     var ctx = usePluginContext();
 
     useEffect(function () {
@@ -94,11 +98,25 @@
         });
     }, []);
 
+    // Only show host panels when node exporter data is present in VictoriaMetrics.
+    useEffect(function () {
+      if (!showHost) return;
+      var now = Math.floor(Date.now() / 1000);
+      ctx.api
+        .get("/api/v1/metrics/query_range?query=node_uname_info&start=" + (now - 120) + "&end=" + now + "&step=60")
+        .then(function (data) {
+          setHasHostData(data && data.status === "success" && data.data && data.data.result && data.data.result.length > 0);
+        })
+        .catch(function () {
+          setHasHostData(false);
+        });
+    }, [showHost]);
+
     var panelEntries = CANONICAL_ORDER
       .filter(function (id) {
         if (!PANEL_MAP[id]) return false;
         if (CONTAINER_PANELS[id] && !hasContainerData) return false;
-        if (HOST_PANELS[id] && !showHost) return false;
+        if (HOST_PANELS[id] && (!showHost || !hasHostData)) return false;
         return true;
       })
       .map(function (id) { return PANEL_MAP[id]; });
