@@ -1,0 +1,26 @@
+feature:
+  - head-branch: ["^feature/", "^feat/"]
+
+enhancement:
+  - head-branch: ["^enhancement/", "^enh/"]
+
+bugfix:
+  - head-branch: ["^bugfix/", "^fix/"]
+
+chore:
+  - changed-files:
+      - any-glob-to-any-file: [".github/**", "**/Dockerfile", "**/docker-compose*.yml"]
+  - head-branch: ["^chore/", "^deps/"]
+
+docs:
+  - changed-files:
+      - any-glob-to-any-file: ["**/*.md"]
+
+refactor:
+  - head-branch: ["^refactor/"]
+
+security:
+  - head-branch: ["^security/"]
+
+tests:
+  - head-branch: ["^test/", "^tests/"]
